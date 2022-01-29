@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Home Page</title>
+    <style>
+        .flex-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            background-color: DodgerBlue;
+        }
+    </style>
+</head>
+<body class="flex-container">
+    <div>
+        <div id="firstname_div" class="mt-5 ml-5">
+            <form action="{{ url_for('get_first_name')}}" method="post">
+                <input type="text" name="fname" placeholder="Enter First Name">
+                <button type="submit" class="btn btn-success">submit</button>
+            </form>
+        </div>
+    
+        <div id="lastname_div" class="m-5">
+            <form action="{{ url_for('get_last_name')}}" method="post">
+                <input type="text" name="lname" placeholder="Enter Last Name">
+                <button type="submit" class="btn btn-success">submit</button>
+            </form>
+        </div>
+    
+        <div id="cnic_div" class="m-5">
+            <form action="{{ url_for('get_cnic')}}" method="post">
+                <input type="text" name="cnic" placeholder="Enter Cnic NO">
+                <button type="submit" class="btn btn-success">submit</button>
+            </form>
+        </div>
+
+        <div id="dob_div" class="m-5">
+            <form action="{{ url_for('get_date_of_birth')}}" method="post">
+                <input type="text" name="dob" placeholder="DOB YYYY-MM-DD Format">
+                <button type="submit" class="btn btn-success">submit</button>
+            </form>
+        </div>
+    
+        <div id="province_div" class="m-5">
+            <form action="{{ url_for('get_province')}}" method="post">
+                <input type="text" name="province_input" placeholder="Enter Your Province Name">
+                <button type="submit" class="btn btn-success">submit</button>
+            </form>
+        </div>
+
+    </div>
+</body>
+</html>
