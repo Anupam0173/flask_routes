@@ -21,8 +21,8 @@ with app.app_context():
     cursor.execute(''' CREATE TABLE IF NOT EXISTS last_name_table (l_name  varchar(20)); ''')
     cursor.execute(''' CREATE TABLE IF NOT EXISTS cnic_table (cnic_no  varchar(20)); ''')
     cursor.execute(''' CREATE TABLE IF NOT EXISTS date_of_birth_table (date_of_birth  Date); ''')
+    cursor.execute(''' CREATE TABLE IF NOT EXISTS province_table (province  varchar(30)); ''')
 
-    
     #Saving the Actions performed on the DB
     mysql.connection.commit()
     
@@ -85,6 +85,19 @@ def get_date_of_birth(date_of_birth):
     cursor.close()
     return f"<p>saving date into db : {input_date}</p>"
     
+@app.route("/province/<string:province>")
+def get_province(province):
+    valid_province_list = ["sindh", "punjab", "kpk", "gilgit baltistan"]
+    is_valid_province = True if province.lower() in valid_province_list else False
+
+    if is_valid_province :
+        cursor = mysql.connection.cursor()
+        cursor.execute(''' INSERT INTO province_table VALUES('{0}')'''.format(province))
+        mysql.connection.commit()
+        cursor.close()
+        return f"your province has been saved in database : {province}</p>"
+    else :
+        return f"province is not valid: {province}</p>"
 
 @app.route("/")
 def hello_world():
