@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_mysqldb import MySQL
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -18,6 +19,9 @@ with app.app_context():
     #Executing SQL Statements
     cursor.execute(''' CREATE TABLE IF NOT EXISTS first_name_table (f_name  varchar(20)); ''')
     cursor.execute(''' CREATE TABLE IF NOT EXISTS last_name_table (l_name  varchar(20)); ''')
+    cursor.execute(''' CREATE TABLE IF NOT EXISTS cnic_table (cnic_no  varchar(20)); ''')
+    cursor.execute(''' CREATE TABLE IF NOT EXISTS date_of_birth_table (date_of_birth  Date); ''')
+
     
     #Saving the Actions performed on the DB
     mysql.connection.commit()
@@ -55,6 +59,32 @@ def get_last_name(last_name):
     else :
         return f"last_name is not valid: {last_name}</p>"
 
+@app.route("/cnic/<string:cnic>")
+def get_cnic(cnic):
+    is_length_less_than_14_char = True if len(cnic) < 14 else False
+    clean_cnic_no = ''.join(char for char in cnic if char.isdigit())
+
+    if is_length_less_than_14_char :
+        cursor = mysql.connection.cursor()
+        cursor.execute(''' INSERT INTO cnic_table VALUES('{0}')'''.format(clean_cnic_no))
+        mysql.connection.commit()
+        cursor.close()
+        return f"your cnic has been saved in database : {cnic}</p>"
+    else :
+        return f"your cnic no is not valid: {cnic}</p>"
+
+@app.route("/date/<string:date_of_birth>")
+def get_date_of_birth(date_of_birth):
+    try:
+        input_date = datetime.strptime(date_of_birth, '%Y-%m-%d').date()
+    except ValueError:
+        return f"<p>Invalid date : {date_of_birth}</p>"
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' INSERT INTO date_of_birth_table VALUES('{0}')'''.format(date_of_birth))
+    mysql.connection.commit()
+    cursor.close()
+    return f"<p>saving date into db : {input_date}</p>"
+    
 
 @app.route("/")
 def hello_world():
