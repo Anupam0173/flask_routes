@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template
 from flask_mysqldb import MySQL
 from datetime import datetime
+import re
 
 app = Flask(__name__)
 
@@ -68,17 +69,17 @@ def get_last_name():
 def get_cnic():
     if request.method == "POST":
         cnic = request.form.get("cnic")
-        is_length_less_than_14_char = True if len(cnic) < 14 else False
+        invalid_char = re.search(r'[^\d-]',cnic)
         clean_cnic_no = ''.join(char for char in cnic if char.isdigit())
-
-        if is_length_less_than_14_char :
+        is_length_more_than_13_char = True if len(clean_cnic_no) > 13 else False
+        if invalid_char or is_length_more_than_13_char:
+            return render_template('response.html',route_name="Cnic NO",value=cnic, valid=False)
+        else :
             cursor = mysql.connection.cursor()
             cursor.execute(''' INSERT INTO cnic_table VALUES('{0}')'''.format(clean_cnic_no))
             mysql.connection.commit()
             cursor.close()
             return render_template('response.html',route_name="Cnic NO",value=cnic, valid=True)
-        else :
-            return render_template('response.html',route_name="Cnic NO",value=cnic, valid=False)
 
 
 @app.route("/date", methods =["POST"])
